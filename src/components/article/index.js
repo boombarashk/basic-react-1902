@@ -15,6 +15,14 @@ class Article extends PureComponent {
     }
 
     render() {
+
+        const waitTransitionEnd = (element) => new Promise(resolve => {
+            const onEnd = () => {
+            element.removeEventListener('transitionend', onEnd)
+        resolve()
+    }
+        element.addEventListener('transitionend', onEnd)
+    })
         if (this.state.error) return <h2>{this.state.error.message}</h2>
 
         const { isOpen, article, onButtonClick } = this.props
@@ -36,12 +44,16 @@ class Article extends PureComponent {
                     transitionLeaveTimeout = {300}
                     transitionAppearTimeout = {1000}
                     component = {Fragment}
-                >
+
+    >
                     {isOpen && getBody(article)}
                 </CSSTransition>
             </Fragment>
         )
     }
+    handleTransitionEnd = () => {
+    console.log("=boom")
+}
 }
 
 function getBody(article) {
